@@ -1,0 +1,23 @@
+{
+  "name": "snapper2-client",
+  "description": "snapper2 client for browser.",
+  "main": "dist/index.js",
+  "version": "0.1.0",
+  "authors": [],
+  "keywords": [
+    "pdf",
+    "viewer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "benchmark",
+    "test",
+    "examples",
+    "gulpfile.js"
+  ],
+  "dependencies": {
+    "engine.io-client": "~1.5.1",
+    "jsonrpc-lite": "~1.0.0"
+  }
+}
