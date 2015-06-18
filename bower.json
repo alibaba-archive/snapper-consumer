@@ -1,7 +1,7 @@
 {
-  "name": "snapper2-client",
-  "description": "snapper2 client for browser.",
-  "main": "dist/index.js",
+  "name": "snapper2-consumer",
+  "description": "snapper2 consumer client for node.js and browser.",
+  "main": "index.js",
   "version": "0.1.0",
   "authors": [],
   "keywords": [

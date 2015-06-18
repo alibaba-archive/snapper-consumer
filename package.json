@@ -1,7 +1,7 @@
 {
-  "name": "snapper2-client",
-  "description": "snapper2 client for browser.",
-  "main": "dist/index.js",
+  "name": "snapper2-consumer",
+  "description": "snapper2 consumer client for node.js and browser.",
+  "main": "index.js",
   "version": "0.1.0",
   "authors": [],
   "keywords": [],
@@ -17,8 +17,15 @@
     "engine.io-client": "~1.5.1",
     "jsonrpc-lite": "~1.0.0"
   },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.1",
+    "gulp-sequence": "^0.3.2",
+    "mocha": "^2.2.5",
+    "standard": "^4.2.1"
+  },
   "scripts": {
-    "test": "gulp test"
+    "test": "standard"
   },
   "ignore": [
     "**/.*",

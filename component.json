@@ -1,9 +1,8 @@
 {
-  "name": "pdfviewer",
-  "description": "PDF Viewer using Mozila PDF JS.",
+  "name": "snapper2-consumer",
+  "description": "snapper2 consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "0.2.0",
-  "homepage": "https://github.com/teambition/pdfviewer",
+  "version": "0.1.0",
   "authors": [],
   "keywords": [
     "pdf",
@@ -16,5 +15,9 @@
     "test",
     "examples",
     "gulpfile.js"
-  ]
+  ],
+  "dependencies": {
+    "engine.io-client": "~1.5.1",
+    "jsonrpc-lite": "~1.0.0"
+  }
 }
