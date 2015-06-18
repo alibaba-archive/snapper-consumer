@@ -15,10 +15,10 @@
   var TIMEOUT = 60 * 1000
 
   function Consumer (host, options) {
+    this.connectDelay = DELAY
     this.host = host
     this.options = options || {}
 
-    this.connectDelay = DELAY
     this.lastRpcId = null
     this.consumerId = null
     this.connection = null
@@ -62,24 +62,27 @@
     throw new Error('not implemented')
   }
 
-  Consumer.prototype.connect = function () {
+  Consumer.prototype.connect = function (host, options) {
     var ctx = this
+
+    if (host) this.host = host
+    if (options) this.options = options
     if (this.connection) this.connection.off()
 
-    if (this.options.token && !this.options.query) this.options.query = 'token=' + this.token
+    if (this.options.token && !this.options.query) this.options.query = 'token=' + this.options.token
     this.connection = new Eio(this.host, this.options)
 
     this.connection
       .on('open', function () {
         ctx.connectDelay = DELAY
-        ctx.consumerId = ctx.connection.id
-        this.connected = true
+        ctx.consumerId = this.id
+        ctx.connected = true
         ctx.join()
         ctx.send()
       })
       .on('close', function (err) {
-        this.connected = false
-        this.connection = null
+        ctx.connected = false
+        ctx.connection = null
         ctx.onerror(err)
 
         setTimeout(function () {

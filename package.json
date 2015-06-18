@@ -2,7 +2,7 @@
   "name": "snapper2-consumer",
   "description": "snapper2 consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [],
   "keywords": [],
   "license": "MIT",
@@ -11,7 +11,9 @@
     "benchmark",
     "test",
     "examples",
-    "gulpfile.js"
+    "gulpfile.js",
+    "bower.json",
+    "component.json"
   ],
   "dependencies": {
     "engine.io-client": "~1.5.1",
@@ -26,14 +28,5 @@
   },
   "scripts": {
     "test": "standard"
-  },
-  "ignore": [
-    "**/.*",
-    "benchmark",
-    "test",
-    "examples",
-    "gulpfile.js",
-    "bower.json",
-    "component.json"
-  ]
+  }
 }
