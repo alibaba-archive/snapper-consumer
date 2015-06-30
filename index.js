@@ -107,7 +107,6 @@
           case 'error':
             if (ctx.pending[res.payload.id]) {
               ctx.pending[res.payload.id].callback(res.payload.error, res.payload.result)
-              delete ctx.pending[res.payload.id]
             } else {
               ctx.onmessage(res.payload, res.type)
             }
@@ -120,7 +119,6 @@
             ctx.onmessage(res.payload, res.type)
         }
       })
-
   }
 
   function RpcCommand (pending, method, message, callback) {
