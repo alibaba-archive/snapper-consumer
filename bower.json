@@ -2,7 +2,7 @@
   "name": "snapper2-consumer",
   "description": "snapper2 consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "authors": [],
   "keywords": [
     "pdf",

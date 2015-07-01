@@ -16,13 +16,13 @@ define((require, exports, module) ->
   http       = require('lib/http-thunks')
 
   class SocketClient extends Consumer
-    onmessage: (message, type) ->
-      if type isnt 'request'
-        return @onerror(new Error('It is not a request: ' + JSON.stringify(message)))
+    onmessage: (event) ->
+      if event.type isnt 'request'
+        return @onerror(new Error('It is not a request: ' + JSON.stringify(event.data)))
       # parse multi sub-messages
-      while message.params.length
+      while event.data.params.length
         try
-          data = JSON.parse(message.params.shift())
+          data = JSON.parse(event.data.params.shift())
           if data and typeof data.e is 'string'
             @trigger(data.e, data.d)
           else
@@ -56,12 +56,12 @@ socketClient.on('xxx', (data) -> )
 var Consumer = require('snapper2-consumer')
 ```
 
-### new Consumer([host][, options])
+### new Consumer([url][, options])
 
 ```js
 var consumer = new Consumer()
 ```
-- `host`: `String`, Snapper2 server host.
+- `url`: `String`, Snapper2 server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
 ### consumer.prototype.onerror(error)
@@ -70,17 +70,18 @@ var consumer = new Consumer()
 
 Default error listener, overwrite it in production.
 
-### consumer.prototype.onmessage(message, type)
+### consumer.prototype.onmessage(event)
 
-- `message`: `Mixed`, JSON-RPC message.
-- `type`: `String`, JSON-RPC type, `'invalid'`, `'notification'`, `'success'`, `'error'`, `'request'`.
+- `event.id`: `String|Number|null|undefined`, JSON-RPC id
+- `event.data`: `Object`, JSON-RPC object.
+- `event.type`: `String`, JSON-RPC type, `'invalid'`, `'notification'`, `'success'`, `'error'`, `'request'`.
 
 Default messages listener, overwrite it in production.
 
-### consumer.prototype.send(method, message[, callback])
+### consumer.prototype.request(method[, params][, callback])
 
-- `method`: `String`, JSON-RPC method.
-- `message`: `Mixed`, JSON-RPC message.
+- `method`: `String`, JSON-RPC request method.
+- `params`: `Mixed`, JSON-RPC request params.
 - `callback`: `function`, response callback.
 
 Send a JSON-RPC request to server.
@@ -91,9 +92,17 @@ Send a JSON-RPC request to server.
 
 `_join` method should be implemented for this method.
 
-### consumer.prototype.connect([host][, options])
+### consumer.prototype._respond(event)
 
-- `host`: `String`, Snapper2 server host.
+It is used to respond server's request.
+
+### consumer.prototype.connect([url][, options])
+
+- `url`: `String`, Snapper2 server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
 Connect to server. The arguments is the same as constructor, should be provided in constructor or here.
+
+### consumer.prototype.close()
+
+Close the client.

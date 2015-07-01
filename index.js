@@ -14,12 +14,12 @@
   var DELAY = (Math.ceil(Math.random() * 10) + 10) * 1000
   var TIMEOUT = 60 * 1000
 
-  function Consumer (host, options) {
-    this.connectDelay = DELAY
-    this.host = host
+  function Consumer (url, options) {
+    this.url = url
     this.options = options || {}
+    this.reconnectionTime = DELAY
 
-    this.lastRpcId = null
+    this.lastId = null
     this.consumerId = null
     this.connection = null
     this.connected = false
@@ -28,33 +28,25 @@
     this.pending = {}
   }
 
-  Consumer.prototype.onerror = function (err) {
-    console.error(new Date(), err)
+  Consumer.prototype.onopen = noOp
+
+  Consumer.prototype.onerror = function (error) {
+    console.error(new Date(), error)
   }
 
-  Consumer.prototype.onmessage = function (message, type) {
-    console.log(new Date(), message, type)
+  Consumer.prototype.onmessage = function (event) {
+    console.log(new Date(), event.type, event.data)
   }
 
-  Consumer.prototype.send = function (method, message, callback) {
-    var packet
-    if (method != null) {
-      packet = new RpcCommand(this.pending, method, message, callback)
-      this.sendQueue.push(packet)
-    }
-    if (!this.connected) return this
-
-    while (this.sendQueue.length) {
-      packet = this.sendQueue.shift()
-      this.connection.send(packet.message)
-    }
+  Consumer.prototype.request = function (method, params, callback) {
+    this.sendQueue.push(new RpcCommand(this.pending, method, params, callback))
+    flushRequest(this)
     return this
   }
 
   Consumer.prototype.join = function (room) {
-    if (room != null) this.joinQueue.push(room)
-    if (!this.connected) return this
-    while (this.joinQueue.length) this._join(this.joinQueue.shift(), this.consumerId)
+    this.joinQueue.push(room)
+    flushJoin(this)
     return this
   }
 
@@ -62,75 +54,94 @@
     throw new Error('not implemented')
   }
 
-  Consumer.prototype.connect = function (host, options) {
+  Consumer.prototype._respond = function (event) {
+    this.connection.send(JSON.stringify(jsonrpc.success(event.id, 'OK')))
+  }
+
+  Consumer.prototype.connect = function (url, options) {
     var ctx = this
 
-    if (host) this.host = host
+    if (url) this.url = url
     if (options) this.options = options
-    if (this.connection) this.connection.off()
-
     if (this.options.token && !this.options.query) this.options.query = 'token=' + this.options.token
-    this.connection = new Eio(this.host, this.options)
 
+    this.connection = new Eio(this.url, this.options)
     this.connection
       .on('open', function () {
-        ctx.connectDelay = DELAY
+        ctx.reconnectionTime = DELAY
         ctx.consumerId = this.id
         ctx.connected = true
-        ctx.join()
-        ctx.send()
+        ctx.onopen()
+        flushJoin(ctx)
+        flushRequest(ctx)
       })
       .on('close', function (err) {
-        ctx.connected = false
-        ctx.connection = null
-        ctx.onerror(err)
+        if (err) ctx.onerror(err)
+        ctx.close()
 
         setTimeout(function () {
-          ctx.connectDelay *= 1.2
+          ctx.reconnectionTime *= 1.2
           ctx.connect()
-        }, ctx.connectDelay)
+        }, ctx.reconnectionTime)
       })
       .on('error', function (err) {
         ctx.onerror(err)
       })
       .on('message', function (message) {
-        var res = jsonrpc.parse(message)
+        var event = new Event(jsonrpc.parse(message))
 
-        switch (res.type) {
+        switch (event.type) {
           case 'invalid':
-            return ctx.onerror(res.payload)
+            return ctx.onerror(event.data)
 
           case 'notification':
-            return ctx.onmessage(res.payload, res.type)
+            return ctx.onmessage(event)
 
           case 'success':
           case 'error':
-            if (ctx.pending[res.payload.id]) {
-              ctx.pending[res.payload.id].callback(res.payload.error, res.payload.result)
+            ctx.lastId = event.id
+            if (ctx.pending[event.id]) {
+              ctx.pending[event.id].callback(event.data.error, event.data.result)
             } else {
-              ctx.onmessage(res.payload, res.type)
+              ctx.onmessage(event)
             }
             return
-
           case 'request':
-            ctx.connection.send(JSON.stringify(jsonrpc.success(res.payload.id, 'OK')))
-            if (res.payload.id === ctx.lastRpcId) return
-            ctx.lastRpcId = res.payload.id
-            ctx.onmessage(res.payload, res.type)
+            ctx._respond(event)
+            if (event.id !== ctx.lastResponseId) {
+              ctx.lastResponseId = event.id
+              ctx.onmessage(event)
+            }
         }
       })
   }
 
-  function RpcCommand (pending, method, message, callback) {
+  Consumer.prototype.close = function () {
+    this.consumerId = null
+    this.connected = false
+    if (this.connection) {
+      this.connection.off()
+      this.connection.close()
+      this.connection = null
+    }
+  }
+
+  function Event (response) {
+    this.type = response.type
+    this.data = response.payload
+    this.id = this.data.id
+  }
+
+  function RpcCommand (pending, method, params, callback) {
     var ctx = this
     this.id = genRpcId()
-    this.message = JSON.stringify(jsonrpc.request(this.id, method, message))
+    this.params = JSON.stringify(jsonrpc.request(this.id, method, params))
     this._callback = callback || noOp
 
     this.pending = pending
     this.pending[this.id] = this
     this.timer = setTimeout(function () {
-      ctx.callback(new Error('Send RPC time out, ' + ctx.id + ', ' + ctx.message))
+      ctx.callback(new Error('Send RPC time out, ' + ctx.id + ', ' + ctx.params))
     }, TIMEOUT)
   }
 
@@ -145,6 +156,16 @@
     if (!this.clear()) return this
     this._callback(err, res)
     return this
+  }
+
+  function flushRequest(ctx) {
+    if (!ctx.connected) return
+    while (ctx.sendQueue.length) ctx.connection.send(ctx.sendQueue.shift().params)
+  }
+
+  function flushJoin (ctx) {
+    if (!ctx.connected) return
+    while (ctx.joinQueue.length) ctx._join(ctx.joinQueue.shift(), ctx.consumerId)
   }
 
   var count = 0
