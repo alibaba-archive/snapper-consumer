@@ -81,6 +81,7 @@
 
         setTimeout(function () {
           ctx.reconnectionTime *= 1.2
+          if (ctx.reconnectionTime > TIMEOUT) ctx.reconnectionTime = TIMEOUT
           ctx.connect()
         }, ctx.reconnectionTime)
       })
