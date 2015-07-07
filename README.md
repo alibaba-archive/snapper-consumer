@@ -64,6 +64,10 @@ var consumer = new Consumer()
 - `url`: `String`, Snapper2 server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
+### consumer.prototype.onopen()
+
+### consumer.prototype.onclose()
+
 ### consumer.prototype.onerror(error)
 
 - `error`: `Error Object`.

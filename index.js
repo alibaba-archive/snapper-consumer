@@ -29,6 +29,7 @@
   }
 
   Consumer.prototype.onopen = noOp
+  Consumer.prototype.onclose = noOp
 
   Consumer.prototype.onerror = function (error) {
     console.error(new Date(), error)
@@ -115,16 +116,23 @@
             }
         }
       })
+
+    return this
   }
 
   Consumer.prototype.close = function () {
+    var ctx = this
+    if (!this.connected && !this.connection) return
     this.consumerId = null
     this.connected = false
     if (this.connection) {
       this.connection.off()
+      this.connection.once('close', function () {
+        ctx.onclose()
+      })
       this.connection.close()
       this.connection = null
-    }
+    } else this.onclose()
   }
 
   function Event (response) {

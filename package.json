@@ -2,7 +2,7 @@
   "name": "snapper2-consumer",
   "description": "snapper2 consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "authors": [],
   "keywords": [],
   "license": "MIT",
