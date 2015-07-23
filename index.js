@@ -167,7 +167,7 @@
     return this
   }
 
-  function flushRequest(ctx) {
+  function flushRequest (ctx) {
     if (!ctx.connected) return
     while (ctx.sendQueue.length) ctx.connection.send(ctx.sendQueue.shift().params)
   }
