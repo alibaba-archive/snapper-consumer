@@ -1,10 +1,10 @@
-snapper2-consumer
+snapper-consumer
 ===
-snapper2 consumer client for node.js and browser.
+snapper consumer client for node.js and browser.
 
-**`Snapper2-consumer` is tested in `Snapper2`**
+**`Snapper-consumer` is tested in `Snapper`**
 
-## Snapper2 https://code.teambition.com/server/snapper2
+## Snapper https://github.com/teambition/snapper
 
 ## Demo
 
@@ -53,7 +53,7 @@ socketClient.on('xxx', (data) -> )
 ## API
 
 ```js
-var Consumer = require('snapper2-consumer')
+var Consumer = require('snapper-consumer')
 ```
 
 ### new Consumer([url][, options])
@@ -61,7 +61,7 @@ var Consumer = require('snapper2-consumer')
 ```js
 var consumer = new Consumer()
 ```
-- `url`: `String`, Snapper2 server host.
+- `url`: `String`, Snapper server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
 ### consumer.prototype.onopen()
@@ -102,7 +102,7 @@ It is used to respond server's request.
 
 ### consumer.prototype.connect([url][, options])
 
-- `url`: `String`, Snapper2 server host.
+- `url`: `String`, Snapper server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
 Connect to server. The arguments is the same as constructor, should be provided in constructor or here.

@@ -1,9 +1,11 @@
 {
-  "name": "snapper2-consumer",
-  "description": "snapper2 consumer client for node.js and browser.",
+  "name": "snapper-consumer",
+  "description": "snapper consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "0.2.3",
-  "authors": [],
+  "version": "0.2.4",
+  "authors": [
+    "Yan Qing <admin@zensh.com>"
+  ],
   "keywords": [],
   "license": "MIT",
   "ignore": [
