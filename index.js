@@ -103,7 +103,7 @@
           case 'error':
             ctx.lastId = event.id
             if (ctx.pending[event.id]) {
-              ctx.pending[event.id].callback(event.data.error, event.data.result)
+              ctx.pending[event.id].done(event.data.error, event.data.result)
             } else {
               ctx.onmessage(event)
             }
@@ -145,12 +145,12 @@
     var ctx = this
     this.id = genRpcId()
     this.params = JSON.stringify(jsonrpc.request(this.id, method, params))
-    this._callback = callback || noOp
+    this.callback = callback || noOp
 
     this.pending = pending
     this.pending[this.id] = this
     this.timer = setTimeout(function () {
-      ctx.callback(new Error('Send RPC time out, ' + ctx.id + ', ' + ctx.params))
+      ctx.done(new Error('Send RPC time out, ' + ctx.id + ', ' + ctx.params))
     }, TIMEOUT)
   }
 
@@ -161,9 +161,9 @@
     return true
   }
 
-  RpcCommand.prototype.callback = function (err, res) {
+  RpcCommand.prototype.done = function (err, res) {
     if (!this.clear()) return this
-    this._callback(err, res)
+    this.callback(err, res)
     return this
   }
 
