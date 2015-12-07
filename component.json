@@ -2,7 +2,7 @@
   "name": "snapper-consumer",
   "description": "snapper consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
     "Yan Qing <admin@zensh.com>"
   ],
@@ -16,7 +16,7 @@
     "gulpfile.js"
   ],
   "dependencies": {
-    "engine.io-client": "~1.5.1",
-    "jsonrpc-lite": "~1.0.0"
+    "engine.io-client": "~1.6.4",
+    "jsonrpc-lite": "~1.1.0"
   }
 }

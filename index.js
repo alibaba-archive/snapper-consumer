@@ -4,10 +4,11 @@
 ;(function (root, factory) {
   'use strict'
 
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('jsonrpc-lite'), require('engine.io-client'))
-  else if (typeof define === 'function' && define.amd) define(['jsonrpc-lite', 'engine.io-client'], factory)
-  else root.Consumer = factory(root.jsonrpc, root.eio)
-
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory(require('jsonrpc-lite'), require('engine.io-client'))
+  } else if (typeof define === 'function' && define.amd) {
+    define(['jsonrpc-lite', 'engine.io-client'], factory)
+  } else root.Consumer = factory(root.jsonrpc, root.eio)
 }(typeof window === 'object' ? window : this, function (jsonrpc, Eio) {
   'use strict'
 

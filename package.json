@@ -2,29 +2,24 @@
   "name": "snapper-consumer",
   "description": "snapper consumer client for node.js and browser.",
   "main": "index.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
     "Yan Qing <admin@zensh.com>"
   ],
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "engine.io-client": "~1.5.4",
+    "engine.io-client": "~1.6.4",
     "jsonrpc-lite": "~1.1.0"
   },
   "devDependencies": {
-    "standard": "^5.3.1"
+    "standard": "^5.4.1"
   },
   "scripts": {
     "test": "standard"
   },
-  "ignore": [
-    "**/.*",
-    "benchmark",
-    "test",
-    "examples",
-    "gulpfile.js",
-    "bower.json",
-    "component.json"
+  "files": [
+    "README.md",
+    "index.js"
   ]
 }
