@@ -12,7 +12,7 @@
 }(typeof window === 'object' ? window : this, function (jsonrpc, Eio) {
   'use strict'
 
-  var DELAY = (Math.ceil(Math.random() * 10) + 10) * 1000
+  var DELAY = (Math.ceil(Math.random() * 50) + 10) * 1000
   var TIMEOUT = 60 * 1000
 
   function Consumer (url, options) {
@@ -53,7 +53,7 @@
   }
 
   Consumer.prototype._join = function (room, consumerId) {
-    throw new Error('not implemented')
+    throw new Error('_join method not implemented')
   }
 
   Consumer.prototype._respond = function (event) {

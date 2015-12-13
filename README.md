@@ -2,7 +2,7 @@ snapper-consumer
 ===
 snapper consumer client for node.js and browser.
 
-**`Snapper-consumer` is tested in `Snapper`**
+**`Snapper-consumer` is tested in `snapper-core`**
 
 ## [Snapper-core](https://github.com/teambition/snapper-core) Teambition push messaging service
 
