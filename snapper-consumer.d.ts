@@ -1,8 +1,4 @@
-declare module 'snapper-consumer' {
-  export = Consumer;
-}
-
-declare class Consumer {
+export default class Consumer {
   constructor(url: string, options: {
     token: string;
     query: string;
