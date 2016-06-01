@@ -67,6 +67,10 @@
     if (options) this.options = options
     if (this.options.token && !this.options.query) this.options.query = 'token=' + this.options.token
 
+    if (this.connection) {
+      this.connection.off()
+      this.connection.close()
+    }
     this.connection = new Eio(this.url, this.options)
     this.connection
       .on('open', function () {
@@ -179,8 +183,9 @@
   }
 
   var count = 0
+  var ISN = (Date.now() - new Date().setMinutes(0, 0, 0)).toString(36)
   function genRpcId () {
-    return 'CID:' + (++count)
+    return ISN + ':' + (++count)
   }
 
   function noOp () {}
