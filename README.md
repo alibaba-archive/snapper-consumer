@@ -56,7 +56,7 @@ socketClient.on('xxx', (data) -> )
 var Consumer = require('snapper-consumer')
 ```
 
-### new Consumer([url][, options])
+### `new Consumer([url][, options])`
 
 ```js
 var consumer = new Consumer()
@@ -64,17 +64,17 @@ var consumer = new Consumer()
 - `url`: `String`, Snapper server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
-### consumer.prototype.onopen()
+### `consumer.prototype.onopen()`
 
-### consumer.prototype.onclose()
+### `consumer.prototype.onclose()`
 
-### consumer.prototype.onerror(error)
+### `consumer.prototype.onerror(error)`
 
 - `error`: `Error Object`.
 
 Default error listener, overwrite it in production.
 
-### consumer.prototype.onmessage(event)
+### `consumer.prototype.onmessage(event)`
 
 - `event.id`: `String|Number|null|undefined`, JSON-RPC id
 - `event.data`: `Object`, JSON-RPC object.
@@ -82,7 +82,16 @@ Default error listener, overwrite it in production.
 
 Default messages listener, overwrite it in production.
 
-### consumer.prototype.request(method[, params][, callback])
+### `consumer.prototype.getToken()`
+
+Default `getToken`, overwrite it in production.
+```js
+Consumer.prototype.getToken = function () {
+  return this.options.token
+}
+```
+
+### `consumer.prototype.request(method[, params][, callback])`
 
 - `method`: `String`, JSON-RPC request method.
 - `params`: `Mixed`, JSON-RPC request params.
@@ -90,23 +99,23 @@ Default messages listener, overwrite it in production.
 
 Send a JSON-RPC request to server.
 
-### consumer.prototype.join(room), consumer.prototype._join(room, consumerId)
+### `consumer.prototype.join(room), consumer.prototype._join(room, consumerId)`
 
 - `room`: `String`, room name.
 
 `_join` method should be implemented for this method.
 
-### consumer.prototype._respond(event)
+### `consumer.prototype._respond(event)`
 
 It is used to respond server's request.
 
-### consumer.prototype.connect([url][, options])
+### `consumer.prototype.connect([url][, options])`
 
 - `url`: `String`, Snapper server host.
 - `options`: `Object`, `engine.io-client` options, but added `options.token`.
 
 Connect to server. The arguments is the same as constructor, should be provided in constructor or here.
 
-### consumer.prototype.close()
+### `consumer.prototype.close()`
 
 Close the client.

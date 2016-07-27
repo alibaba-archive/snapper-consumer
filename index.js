@@ -60,12 +60,18 @@
     this.connection.send(JSON.stringify(jsonrpc.success(event.id, 'OK')))
   }
 
+  Consumer.prototype.getToken = function () {
+    return this.options.token
+  }
+
   Consumer.prototype.connect = function (url, options) {
     var ctx = this
 
     if (url) this.url = url
     if (options) this.options = options
-    if (this.options.token && !this.options.query) this.options.query = 'token=' + this.options.token
+
+    var token = this.getToken()
+    if (token) this.options.query = 'token=' + token
 
     if (this.connection) {
       this.connection.off()
