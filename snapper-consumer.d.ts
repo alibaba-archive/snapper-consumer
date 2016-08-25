@@ -25,6 +25,7 @@ export default class Consumer {
     [index: string]: any
   } | any[], callback: (err: Error, res: any) => any): Consumer;
   join(room?: string): Consumer;
+  getToken(): string;
   _join(roomId: string, consumerId: string): any;
   _respond(event: string): void;
   connect(url: string, options?: {
