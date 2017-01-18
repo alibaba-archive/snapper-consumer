@@ -1,17 +1,19 @@
-export interface RequestObject {
-  id: number;
-  jsonrpc: string;
-  method: 'publish' | 'notification' | 'success' | 'error' | 'invalid';
-  params: string[];
+declare namespace Consumer {
+  export interface RequestObject {
+    id: number;
+    jsonrpc: string;
+    method: 'publish' | 'notification' | 'success' | 'error' | 'invalid';
+    params: string[];
+  }
+
+  export interface RequestEvent {
+    id: number;
+    type: 'request' | 'invalid' | 'notification' | 'success' | 'error';
+    data: RequestObject;
+  }
 }
 
-export interface RequestEvent {
-  id: number;
-  type: 'request' | 'invalid' | 'notification' | 'success' | 'error';
-  data: RequestObject;
-}
-
-export default class Consumer {
+declare class Consumer {
   constructor(url?: string, options?: {
     token: string;
     query: string;
@@ -20,7 +22,7 @@ export default class Consumer {
   onopen: Function;
   onclose: Function;
   onerror(err: Error): void;
-  onmessage(event: RequestEvent): void;
+  onmessage(event: Consumer.RequestEvent): void;
   request(method: string, params: {
     [index: string]: any
   } | any[], callback: (err: Error, res: any) => any): Consumer;
@@ -36,3 +38,5 @@ export default class Consumer {
   }): Consumer;
   close(): void;
 }
+
+export = Consumer
