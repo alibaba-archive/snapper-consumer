@@ -3,7 +3,7 @@
   "description": "snapper consumer client for node.js and browser.",
   "main": "index.js",
   "typings": "./snapper-consumer.d.ts",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "authors": [
     "Yan Qing <admin@zensh.com>"
   ],
