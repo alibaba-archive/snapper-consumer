@@ -10,7 +10,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "engine.io-client": "~3.0.0",
+    "engine.io-client": "^3.0.0",
     "jsonrpc-lite": "~1.2.3"
   },
   "devDependencies": {
