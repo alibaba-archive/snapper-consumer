@@ -1,9 +1,16 @@
 declare namespace Consumer {
+
+  export interface TCMParam {
+    appid: string,
+    collapseKey: string,
+    data: string
+  }
+
   export interface RequestObject {
     id: number;
     jsonrpc: string;
     method: 'publish' | 'notification' | 'success' | 'error' | 'invalid';
-    params: string[];
+    params: string[] | TCMParam[];
   }
 
   export interface RequestEvent {
